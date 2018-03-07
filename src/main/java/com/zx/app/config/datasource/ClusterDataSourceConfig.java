@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
@@ -33,6 +34,9 @@ public class ClusterDataSourceConfig {
     @Value("${cluster.datasource.driverClassName}")
     private String driverClass;
 
+    @Value("${mybatis_config_filepath}")
+    private String configLocation;
+
     @Bean(name = "clusterDataSource")
     public DataSource clusterDataSource() {
         DruidDataSource dataSource = new DruidDataSource();
@@ -52,8 +56,9 @@ public class ClusterDataSourceConfig {
     public SqlSessionFactory clusterSqlSessionFactory(@Qualifier("clusterDataSource") DataSource clusterDataSource)
             throws Exception {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
-        sessionFactory.setDataSource(clusterDataSource);
-        sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()
+        sessionFactory.setDataSource(clusterDataSource);//设置数据源
+        sessionFactory.setConfigLocation(new DefaultResourceLoader().getResource(configLocation));//设置配置地址
+        sessionFactory.setMapperLocations(new PathMatchingResourcePatternResolver()//设置映射地址
                 .getResources(ClusterDataSourceConfig.MAPPER_LOCATION));
         return sessionFactory.getObject();
     }
