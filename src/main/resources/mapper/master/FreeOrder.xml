@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zx.app.dao.master.FreeOrderDao">
+    <select id="queryFreeOrderList" resultType="com.zx.app.entity.FreeOrder">
+        SELECT
+        id,
+        activity_title,
+        activity_description,
+        activity_detail,
+        activity_tag,
+        activity_max_joinners,
+        activity_begain_time,
+        activity_end_time,
+        activity_lucky_id,
+        activity_cover,
+        activity_unit_tip,
+        activity_price,
+        activity_state
+        FROM
+        zx_free_order
+        WHERE
+        is_delete=0
+    </select>
+
+    <insert id="insertOrderGroup" useGeneratedKeys="true" keyColumn="id" parameterType="com.zx.app.entity.FreeOrderGroup">
+        INSERT INTO
+        zx_free_order_group
+        (
+        activity_id,
+        joinner_id,
+        pay_order_id
+        )
+        VALUES
+        (
+        ${activityId},
+        ${joinnerId},
+        ${payOrderId}
+        )
+    </insert>
+</mapper>

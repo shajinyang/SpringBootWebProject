@@ -1,5 +1,7 @@
 package com.zx.app.entity;
 
+import org.springframework.web.bind.annotation.RequestBody;
+
 public class User {
 
     private int fId;
